@@ -1,51 +1,31 @@
-public class CanDriveTest { // public name
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+public class CanDriveTest { 
 
-    public static void main(String[] args) { // the main method that running the code 
-        // Run all code one by one
-        testAgeBelowDriving();
-        testExactDrivingAge();
-        testAgeAboveDriving();
-        testZeroAge();
-        testNegativeAge();
+    @Test
+    void testUnderAge(){
+        assertFalse(Driving.canDrive(15), "15 is not legal age");
     }
 
-    public static void testAgeBelowDriving() { // the function with age 15
-        if (!CanDrive.canDrive(15)) {
-            System.out.println("testAgeBelowDriving: PASSED");
-        } else {
-            System.out.println("testAgeBelowDriving: FAILED");
-        }
+    @Test
+    void testMinimumAge(){
+        assertTrue(Driving.canDrive(16), "16 is legal age");
     }
 
-    public static void testExactDrivingAge() {
-        if (CanDrive.canDrive(16)) {
-            System.out.println("testExactDrivingAge: PASSED");
-        } else {
-            System.out.println("testExactDrivingAge: FAILED");
-        }
+     @Test
+    void testAdultAge(){
+        assertTrue(Driving.canDrive(22), "22 is legal age");
     }
 
-    public static void testAgeAboveDriving() {
-        if (CanDrive.canDrive(20)) {
-            System.out.println("testAgeAboveDriving: PASSED");
-        } else {
-            System.out.println("testAgeAboveDriving: FAILED");
-        }
+    @Test
+    void testZeroAge(){
+        assertTrue(Driving.canDrive(0), "0 is not legal age");
     }
 
-    public static void testZeroAge() {
-        if (!CanDrive.canDrive(0)) {
-            System.out.println("testZeroAge: PASSED");
-        } else {
-            System.out.println("testZeroAge: FAILED");
-        }
+     @Test
+    void testMinusAge(){
+        assertTrue(Driving.canDrive(-12), "-12 is not legal age");
     }
+    
 
-    public static void testNegativeAge() {
-        if (!CanDrive.canDrive(-10)) {
-            System.out.println("testNegativeAge: PASSED");
-        } else {
-            System.out.println("testNegativeAge: FAILED");
-        }
-    }
-}
+   
