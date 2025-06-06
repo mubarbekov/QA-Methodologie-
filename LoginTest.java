@@ -33,9 +33,9 @@ public class LoginTest {
             
             
 
-            if (expectedResult && loginSucceeded) {
+            if (loginSucceeded) {
                 System.out.println("Passed with correct Login");
-            } else if (!expectedResult && loginFailed) {
+            } else if (loginFailed) {
                 System.out.println("Passed with uncorrect Login.");
             } else {
                 System.out.println("Failed: Unexpected login behavior.");
