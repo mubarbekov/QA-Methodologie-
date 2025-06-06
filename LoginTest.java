@@ -1,66 +1,49 @@
-import org.openqa.selenium.By; // for using HTML USING ID
-import org.openqa.selenium.WebDriver; // Using for WebDriver
-import org.openqa.selenium.WebElement; // represent any HTML ELEMENTS
-import org.openqa.selenium.chrome.ChromeDriver; // helps to use chrome using selenium
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver; 
 
 public class LoginTest {
 
     public static void main(String[] args) {
-        // It helps to path chromeDriver
         System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
 
-        // open new file to chrome
         WebDriver driver = new ChromeDriver();
-
-        // Successful Login Test
         testLogin(driver, "test1", "Test12456", true);
-
-        // Unsuccessful Login Test
-        testLogin(driver, "test1", "test1234", false);
-
-        // 
+        testLogin(driver, "test1", "test1234", false); 
         driver.quit();
     }
 
-    public static void testLogin(WebDriver driver, String username, String password, boolean shouldLoginSucceed) {
+    public static void performLoginTest(WebDriver driver, String username, String password, boolean shouldLoginSucceed) {
         try {
-            // Navigate to login page
             driver.get("https://letsusedata.com/login");
-
-            // Find username and possword from mail
-            WebElement usernameInput = driver.findElement(By.id("username")); // Adjust ID if needed
-            WebElement passwordInput = driver.findElement(By.id("password")); // Adjust ID if needed
-            WebElement loginButton = driver.findElement(By.id("loginButton")); // Adjust ID if needed
-
-            // clear existing values
+            WebElement userfield = driver.findElement(By.id("username")); 
+            WebElement passwordfield = driver.findElement(By.id("password")); 
+            WebElement loginButton = driver.findElement(By.id("loginButton")); 
             usernameInput.clear();
             usernameInput.sendKeys(username);
-
             passwordInput.clear();
             passwordInput.sendKeys(password);
-
-            // clicking login button
             loginButton.click();
-
-            // Wait a few seconds 
             Thread.sleep(2000);
+            String currentPage = driver.getCurrentUrl().toLowerCase();
+            String pageText = driver.getPagesource().toLowerCase();
+             boolean loginSucceeded = currentPage.contains("dashboard") || pageText.contains("welcome");
+            boolean loginFailed = currentPage.contains("login") || pageText.contains("invalid username or password");
+            
+            
 
-            if (shouldLoginSucceed) {
-                if (driver.getPageSource().contains("Welcome") || driver.getCurrentUrl().contains("dashboard")) {
-                    System.out.println("✅ Successful login test passed.");
-                } else {
-                    System.out.println("❌ Successful login test failed.");
-                }
+            if (expectedResult && loginSucceeded) {
+                System.out.println("Passed with correct Login");
+            } else if (!expectedResult && loginFailed) {
+                System.out.println("Passed with uncorrect Login.");
             } else {
-                if (driver.getPageSource().contains("Invalid username or password") || driver.getCurrentUrl().contains("login")) {
-                    System.out.println("✅ Unsuccessful login test passed.");
-                } else {
-                    System.out.println("❌ Unsuccessful login test failed.");
-                }
+                System.out.println("Failed: Unexpected login behavior.");
             }
 
         } catch (Exception e) {
-            System.out.println("Error during test: " + e.getMessage());
+            System.out.println("Exception during test: " + e.getMessage());
         }
     }
 }
+
