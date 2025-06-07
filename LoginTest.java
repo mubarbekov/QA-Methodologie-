@@ -1,14 +1,11 @@
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.junit.jupiter.api.*;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.*;
 
 import java.time.Duration;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class LoginTest {
 
@@ -29,34 +26,39 @@ public class LoginTest {
 
     @Test
     public void testValidLogin() {
-        boolean result = performLogin("test1", "Test12456");
-        assertTrue(result, "Login should succeed with valid credentials");
+        driver.get("https://letsusedata.com/login");
+
+        WebElement usernameInput = wait.until(ExpectedConditions.elementToBeClickable(By.id("username")));
+        WebElement passwordInput = driver.findElement(By.id("password"));
+        WebElement loginButton = driver.findElement(By.id("loginButton"));
+
+        usernameInput.clear();
+        usernameInput.sendKeys("test1");
+        passwordInput.clear();
+        passwordInput.sendKeys("Test12456");
+        loginButton.click();
+        
+        boolean isDashboard = wait.until(ExpectedConditions.urlContains("dashboard"));
+        assertTrue(isDashboard, "Redirected to dashboard after login in");
     }
 
-    @Test
+   @Test
     public void testInvalidLogin() {
-        boolean result = performLogin("test1", "wrongpass");
-        assertFalse(result, "Login should fail with invalid credentials");
+        driver.get("https://letsusedata.com/login");
 
-    public static boolean performLoginTest(String username, String password) {
-        try {
-            driver.get("https://letsusedata.com/login");
-            WebElement userfield = driver.findElement(By.id("username")); 
-            WebElement passwordfield = driver.findElement(By.id("password")); 
-            WebElement loginButton = driver.findElement(By.id("loginButton")); 
-            usernameInput.clear();
-            usernameInput.sendKeys(username);
-            passwordInput.clear();
-            passwordInput.sendKeys(password);
-            loginButton.click();
-            Thread.sleep(2000);
-            String pageUrl = driver.getCurrentUrl().toLowerCase();
-            String pageText = driver.getPagesource().toLowerCase();
-            return pageUrl.contains("dashboard") || pageSource.contiains("welcome");
+        WebElement usernameInput = wait.until(ExpectedConditions.elementToBeClickable(By.id("username")));
+        WebElement passwordInput = driver.findElement(By.id("password"));
+        WebElement loginButton = driver.findElement(By.id("loginButton"));
 
-        } catch (Exception e) {
-            System.out.println("Exception during test: " + e.getMessage());
-        }
+        usernameInput.clear();
+        usernameInput.sendKeys("test1");
+        passwordInput.clear();
+        passwordInput.sendKeys("test1234");
+        loginButton.click();
+        
+        WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("error-message"))); 
+
+        assertEquals("Invalid username or password", errorMessage.getText().trim(), "Correct-Error");
     }
 }
 
